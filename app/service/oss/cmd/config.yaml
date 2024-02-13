@@ -1,0 +1,11 @@
+Server:
+  GRPC:
+    Host: "0.0.0.0"
+    Port: 9000
+Service:
+  Oss:
+    Local:
+      AccessKeyID: "18888888881"
+      AccessKeySecret: "18888888881"
+      Bucket: "no_change"
+      BucketServiceUrl : "http://172.20.10.196:9100/manager/api/libong/ossupload"
