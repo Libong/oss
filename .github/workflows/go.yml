@@ -26,5 +26,15 @@ jobs:
     - name: Check out Go
       run: actions/checkout@v1
 
+    - name: make env
+      shell: bash
+      run: |
+        export GO111MODULE=on
+        export GOPRIVATE=github.com/Libong
+        export GOPROXY=https://goproxy.cn,direct
+        git config --global --add url."git@github.com:".insteadOf "https://github.com/" 
+        make ci
     - name: Install dependencies
-      run: go test -v ./...
+      run:  go mod tidy
+    - name: build
+      run : go build
