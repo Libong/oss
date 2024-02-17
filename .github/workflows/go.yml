@@ -34,7 +34,7 @@ jobs:
         export GO111MODULE=on
         export GOPRIVATE=github.com/Libong
         export GOPROXY=https://goproxy.cn,direct
-        git config --global url."https://libong:${{secrets.GO_MOD}}@github.com:".insteadOf "https://github.com"
+        git config --global url."https://libong:${{secrets.GO_MOD}}@github.com".insteadOf "https://github.com"
     - name: Install dependencies
       run:  go mod tidy
     - name: build
