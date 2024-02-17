@@ -38,4 +38,4 @@ jobs:
     - name: Install dependencies
       run:  go mod tidy
     - name: build
-      run : go build
+      run : go build ./app/interface/oss/cmd/main.go
