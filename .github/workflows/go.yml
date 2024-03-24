@@ -48,7 +48,7 @@ jobs:
         name: oss
         path: /home/runner/work/oss/oss
     - name: Login to ali cloud
-      uses: alibaba/acr-login@v1
+      uses: aliyun/acr-login@v1
       with:
         login-server: registry.cn-hangzhou.aliyuncs.com
         region-id: cn-hangzhou
