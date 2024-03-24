@@ -47,3 +47,36 @@ jobs:
       with:
         name: oss
         path: /home/runner/work/oss/oss
+    - name: Login to ali cloud
+      uses: alibaba/acr-login@v1
+      with:
+        login-server: registry.cn-hangzhou.aliyuncs.com
+        region-id: cn-hangzhou
+        username: ${{ secrets.ALIBABA_CLOUD_USERNAME }}
+        password: ${{ secrets.ALIBABA_CLOUD_PASSWORD }}
+    - name: Build and push docker image
+      env:
+        IMAGE_TAG: ${{github.sha}}
+      run: |
+        docker build -t registry.cn-hangzhou.aliyuncs.com/libong/test-rep:$IMAGE_TAG .
+        docker push registry.cn-hangzhou.aliyuncs.com/libong/test-rep:$IMAGE_TAG
+#      uses: alibaba/acr-login-action@v1
+#      with:
+#        registry: registry.cn-hangzhou.aliyuncs.com/libong/test-rep
+#        username: ${{ secrets.ALIBABA_CLOUD_USERNAME }}
+#        password: ${{ secrets.ALIBABA_CLOUD_PASSWORD }}
+#    - name: Containerize Application
+#      uses: docker/build-push-action@v2
+#      with:
+#        push: true
+#        tags: your-alibaba-cloud-registry.com/your-repo/myapp:latest
+#        build: |
+#          docker build -t myapp .
+#    - name: Deploy to Alibaba Cloud Container Registry
+#      env:
+#        REGISTRY: your-alibaba-cloud-registry.com
+#        IMAGE: your-repo/myapp:latest
+#      run: |
+#        docker tag myapp $REGISTRY/$IMAGE
+#        docker push $REGISTRY/$IMAGE
+
