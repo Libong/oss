@@ -1,5 +1,5 @@
 #源镜像
-FROM golang:1.19-alpine3.16 as builder
+FROM golang:1.20-alpine3.16 as builder
 #作者
 MAINTAINER ic_xcc
 
