@@ -10,6 +10,7 @@ RUN set -ex \
     && apk --no-cache add ca-certificates
 
 WORKDIR /build
+RUN ls -l
 # 创建了一个app-runner的用户, -D表示无密码
 #RUN adduser -u 10001 -D app-runner
 # 安装依赖包
