@@ -11,7 +11,6 @@ MAINTAINER libong
 
 #WORKDIR /build
 RUN pwd
-RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 #RUN ls -l
 # 创建了一个app-runner的用户, -D表示无密码
 #RUN adduser -u 10001 -D app-runner
