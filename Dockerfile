@@ -20,14 +20,14 @@ ENV GOPRIVATE github.com/Libong
 ENV GO111MODULE on
 #RUN git config --global url."https://libong:${{secrets.GO_MOD}}@github.com".insteadOf "https://github.com"
 # 将当前目录的代码推送到docker容器里的目录下 TODO 不知道当前目录下有什么
-COPY go.mod /app/
-COPY go.sum /app/
+#COPY go.mod /app/
+#COPY go.sum /app/
 # 把当前目录的文件拷过去，编译代码
 COPY . /app/
 WORKDIR /app
 RUN ls -l
-RUN go mod tidy
-RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -a  -ldflags '-w -s' -o main .
+#RUN go mod tidy
+#RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -a  -ldflags '-w -s' -o main .
 
 # 暴露服务端口
 #EXPOSE 8088
@@ -47,4 +47,7 @@ RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -a  -ldflags '-w -s' -o main 
 # 使用app-runner启动
 #USER app-runner
 #ENTRYPOINT ["/app/blockchain-middleware"]
+
+# 定义容器运行时的命令
+CMD ["./main"]
 
