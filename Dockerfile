@@ -11,7 +11,6 @@ MAINTAINER libong
 
 #WORKDIR /build
 RUN pwd
-WORKDIR /app
 #RUN ls -l
 # 创建了一个app-runner的用户, -D表示无密码
 #RUN adduser -u 10001 -D app-runner
@@ -20,11 +19,12 @@ ENV GOPROXY https://goproxy.cn
 ENV GOPRIVATE github.com/Libong
 ENV GO111MODULE on
 #RUN git config --global url."https://libong:${{secrets.GO_MOD}}@github.com".insteadOf "https://github.com"
-COPY go.mod .
-COPY go.sum .
+COPY go.mod /app/
+COPY go.sum /app/
 RUN go mod tidy
 # 把当前目录的文件拷过去，编译代码
-COPY . ./
+COPY . /app/
+WORKDIR /app
 RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -a  -ldflags '-w -s' -o main .
 
 # 暴露服务端口
