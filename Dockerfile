@@ -11,6 +11,7 @@ MAINTAINER libong
 
 #WORKDIR /build
 RUN pwd
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 #RUN ls -l
 # 创建了一个app-runner的用户, -D表示无密码
 #RUN adduser -u 10001 -D app-runner
@@ -25,6 +26,7 @@ COPY go.sum /app/
 # 把当前目录的文件拷过去，编译代码
 COPY . /app/
 WORKDIR /app
+RUN ls -l
 RUN go mod tidy
 RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -a  -ldflags '-w -s' -o main .
 
