@@ -10,6 +10,7 @@ MAINTAINER libong
 #    && apk --no-cache add ca-certificates
 
 #WORKDIR /build
+RUN pwd
 WORKDIR /app
 #RUN ls -l
 # 创建了一个app-runner的用户, -D表示无密码
