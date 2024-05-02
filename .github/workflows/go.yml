@@ -20,9 +20,10 @@ jobs:
     timeout-minutes: 3
     #步骤
     steps:
+      #获取源代码并存放在/home/runner/work/repo/repo下 repo为仓库名称
     - name: Check out Go
       uses: actions/checkout@v3
-
+      #安装go环境
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
@@ -42,11 +43,12 @@ jobs:
       #编译
     - name: build
       run : go build ./app/interface/oss/cmd/main.go
+      #将任何文件进行上传
     - name: Upload
       uses: actions/upload-artifact@v1
       with:
         name: oss
-        path: /home/runner/work/oss/oss
+        path: /home/runner/work/oss/oss/main
     - name: Login to ali cloud
       uses: aliyun/acr-login@v1
       with:
@@ -60,23 +62,3 @@ jobs:
       run: |
         docker build -t registry.cn-hangzhou.aliyuncs.com/libong/test-rep:$IMAGE_TAG .
         docker push registry.cn-hangzhou.aliyuncs.com/libong/test-rep:$IMAGE_TAG
-#      uses: alibaba/acr-login-action@v1
-#      with:
-#        registry: registry.cn-hangzhou.aliyuncs.com/libong/test-rep
-#        username: ${{ secrets.ALIBABA_CLOUD_USERNAME }}
-#        password: ${{ secrets.ALIBABA_CLOUD_PASSWORD }}
-#    - name: Containerize Application
-#      uses: docker/build-push-action@v2
-#      with:
-#        push: true
-#        tags: your-alibaba-cloud-registry.com/your-repo/myapp:latest
-#        build: |
-#          docker build -t myapp .
-#    - name: Deploy to Alibaba Cloud Container Registry
-#      env:
-#        REGISTRY: your-alibaba-cloud-registry.com
-#        IMAGE: your-repo/myapp:latest
-#      run: |
-#        docker tag myapp $REGISTRY/$IMAGE
-#        docker push $REGISTRY/$IMAGE
-
