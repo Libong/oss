@@ -43,7 +43,7 @@ jobs:
       run:  go mod tidy
       #编译
     - name: build
-      run : go build ./app/interface/oss/cmd/main.go
+      run : CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./app/interface/oss/cmd/main.go
       #将任何文件进行上传 可以在action后获取
     - name: Upload
       uses: actions/upload-artifact@v1

@@ -3,8 +3,9 @@ FROM golang:1.20-alpine3.16 as builder
 #作者
 MAINTAINER libong
 
-#RUN set -ex \
-#    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
+#RUN set -eux && sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
+RUN set -ex \
+    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 #    && apk --update add tzdata \
 #    && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 #    && apk --no-cache add ca-certificates
