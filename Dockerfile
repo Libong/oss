@@ -19,11 +19,11 @@ ENV GOPROXY https://goproxy.cn
 ENV GOPRIVATE github.com/Libong
 ENV GO111MODULE on
 #RUN git config --global url."https://libong:${{secrets.GO_MOD}}@github.com".insteadOf "https://github.com"
-# 将当前目录的代码推送到docker容器里的目录下 TODO 不知道当前目录下有什么
+# 将当前目录的代码推送到docker容器里的目录下
 #COPY go.mod /app/
 #COPY go.sum /app/
 # 把当前目录的文件拷过去，编译代码
-COPY . /app/
+COPY ./main /app/
 WORKDIR /app
 RUN ls -l
 #RUN go mod tidy
@@ -50,4 +50,9 @@ RUN ls -l
 
 # 定义容器运行时的命令
 CMD ["./main"]
+
+RUN apk add --no-cache --virtual .build-deps <package-name> && \
+    some-build-command && \
+    apk del .build-deps \
+RUN rm -rf /var/cache/apk/*
 

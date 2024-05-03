@@ -43,12 +43,13 @@ jobs:
       #编译
     - name: build
       run : go build ./app/interface/oss/cmd/main.go
-      #将任何文件进行上传
+      #将任何文件进行上传 可以在action后获取
     - name: Upload
       uses: actions/upload-artifact@v1
       with:
         name: oss
         path: /home/runner/work/oss/oss/main
+      #登录阿里云镜像
     - name: Login to ali cloud
       uses: aliyun/acr-login@v1
       with:
@@ -56,9 +57,12 @@ jobs:
         region-id: cn-hangzhou
         username: ${{ secrets.ALIBABA_CLOUD_USERNAME }}
         password: ${{ secrets.ALIBABA_CLOUD_PASSWORD }}
+      #构建成docker镜像
     - name: Build and push docker image
       env:
+        #使用github的commit分支id
         IMAGE_TAG: ${{github.sha}}
+        #docker build 构建docker镜像 -t自定义标签(镜像id) .(使用当前目录为工作目录 github action默认为/home/runner/work/oss/oss/)
       run: |
         docker build -t registry.cn-hangzhou.aliyuncs.com/libong/test-rep:$IMAGE_TAG .
         docker push registry.cn-hangzhou.aliyuncs.com/libong/test-rep:$IMAGE_TAG
