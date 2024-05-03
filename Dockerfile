@@ -49,10 +49,8 @@ RUN ls -l
 #ENTRYPOINT ["/app/blockchain-middleware"]
 
 # 定义容器运行时的命令
-CMD ["./main"]
 
-RUN apk add --no-cache --virtual .build-deps <package-name> && \
-    some-build-command && \
-    apk del .build-deps \
+#CMD ["/app/main"]
+
 RUN rm -rf /var/cache/apk/*
 
