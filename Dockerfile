@@ -12,10 +12,10 @@ MAINTAINER libong
 # 创建了一个app-runner的用户, -D表示无密码
 #RUN adduser -u 10001 -D app-runner
 # 设置环境变量
-ENV GOPROXY https://goproxy.cn
-ENV GOPRIVATE github.com/Libong
-ENV CGO_ENABLED 1
-ENV GO111MODULE on
+#ENV GOPROXY https://goproxy.cn
+#ENV GOPRIVATE github.com/Libong
+#ENV CGO_ENABLED 1
+#ENV GO111MODULE on
 #RUN git config --global url."https://libong:${{secrets.GO_MOD}}@github.com".insteadOf "https://github.com"
 RUN apk add --no-cache libc6-compat
 # 将当前目录的代码推送到docker容器里的目录下
