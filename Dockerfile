@@ -19,6 +19,8 @@ ENV GOPROXY https://goproxy.cn
 ENV GOPRIVATE github.com/Libong
 ENV GO111MODULE on
 #RUN git config --global url."https://libong:${{secrets.GO_MOD}}@github.com".insteadOf "https://github.com"
+
+RUN mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
 # 将当前目录的代码推送到docker容器里的目录下
 #COPY go.mod /app/
 #COPY go.sum /app/
@@ -52,5 +54,5 @@ RUN ls -l
 
 #CMD ["/app/main"]
 
-RUN rm -rf /var/cache/apk/*
+#RUN rm -rf /var/cache/apk/* 无用
 
