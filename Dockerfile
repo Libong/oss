@@ -14,7 +14,7 @@ MAINTAINER libong
 # 设置环境变量
 ENV GOPROXY https://goproxy.cn
 ENV GOPRIVATE github.com/Libong
-ENV CGO_ENABLED 0
+ENV CGO_ENABLED 1
 ENV GO111MODULE on
 #RUN git config --global url."https://libong:${{secrets.GO_MOD}}@github.com".insteadOf "https://github.com"
 RUN apk add --no-cache libc6-compat
