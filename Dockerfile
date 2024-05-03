@@ -9,25 +9,24 @@ MAINTAINER libong
 #    && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 #    && apk --no-cache add ca-certificates
 
-#WORKDIR /build
-RUN pwd
-#RUN ls -l
 # 创建了一个app-runner的用户, -D表示无密码
 #RUN adduser -u 10001 -D app-runner
 # 设置环境变量
 ENV GOPROXY https://goproxy.cn
 ENV GOPRIVATE github.com/Libong
+ENV CGO_ENABLED 0
 ENV GO111MODULE on
 #RUN git config --global url."https://libong:${{secrets.GO_MOD}}@github.com".insteadOf "https://github.com"
-
+RUN apk add --no-cache libc6-compat
 # 将当前目录的代码推送到docker容器里的目录下
 #COPY go.mod /app/
 #COPY go.sum /app/
 # 把当前目录的文件拷过去，编译代码
-COPY . /app/
+COPY ./main /app/
 WORKDIR /app
-RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -a  -ldflags '-w -s' -o main ./app/interface/oss/cmd
 RUN ls -l
+#RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -o main ./app/interface/oss/cmd
+#RUN ls -l
 #RUN go mod tidy
 #RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -a  -ldflags '-w -s' -o main .
 
