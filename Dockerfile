@@ -20,13 +20,13 @@ ENV GOPRIVATE github.com/Libong
 ENV GO111MODULE on
 #RUN git config --global url."https://libong:${{secrets.GO_MOD}}@github.com".insteadOf "https://github.com"
 
-RUN mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
 # 将当前目录的代码推送到docker容器里的目录下
 #COPY go.mod /app/
 #COPY go.sum /app/
 # 把当前目录的文件拷过去，编译代码
-COPY ./main /app/
+COPY . /app/
 WORKDIR /app
+RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -a  -ldflags '-w -s' -o main ./app/interface/oss/cmd
 RUN ls -l
 #RUN go mod tidy
 #RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -a  -ldflags '-w -s' -o main .
