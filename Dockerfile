@@ -1,11 +1,11 @@
 #源镜像
-FROM golang:1.20-alpine3.16 as builder
+#FROM golang:1.20-alpine3.16 as builder
 #作者
-MAINTAINER libong
+#MAINTAINER libong
 
 #RUN set -eux && sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories
-RUN set -ex \
-    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+#RUN set -ex \
+#    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 #    && apk --update add tzdata \
 #    && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 #    && apk --no-cache add ca-certificates
@@ -18,14 +18,14 @@ RUN set -ex \
 #ENV CGO_ENABLED 1
 #ENV GO111MODULE on
 #RUN git config --global url."https://libong:${{secrets.GO_MOD}}@github.com".insteadOf "https://github.com"
-RUN apk add --no-cache libc6-compat
+#RUN apk add --no-cache libc6-compat
 # 将当前目录的代码推送到docker容器里的目录下
 #COPY go.mod /app/
 #COPY go.sum /app/
 # 把当前目录的文件拷过去，编译代码
-COPY ./main /app/
-WORKDIR /app
-RUN ls -l
+#COPY ./main /app/
+#WORKDIR /app
+#RUN ls -l
 #RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -o main ./app/interface/oss/cmd
 #RUN ls -l
 #RUN go mod tidy
@@ -51,8 +51,16 @@ RUN ls -l
 #ENTRYPOINT ["/app/blockchain-middleware"]
 
 # 定义容器运行时的命令
-
 #CMD ["/app/main"]
 
-#RUN rm -rf /var/cache/apk/* 无用
-
+FROM alpine AS runner
+#作者
+MAINTAINER libong
+RUN set -ex \
+    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
+WORKDIR /app
+COPY ./main /app/
+WORKDIR /app
+RUN ls -l
+EXPOSE 8080
+ENTRYPOINT ["./main"]
