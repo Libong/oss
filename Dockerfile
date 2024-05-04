@@ -62,6 +62,6 @@ COPY ./main /app/
 #设置工作目录
 WORKDIR /app
 # 暴露服务端口
-EXPOSE 8080
+#EXPOSE 8080
 # 定义容器运行时的命令
 #ENTRYPOINT ["./main"]
