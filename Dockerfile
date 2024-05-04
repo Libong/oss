@@ -1,4 +1,4 @@
-#源镜像
+#第一级构建如果需要进行go build的话 就需要使用自带go环境的alpine源镜像 不过镜像大小很大 100M多
 #FROM golang:1.20-alpine3.16 as builder
 #作者
 #MAINTAINER libong
@@ -19,9 +19,6 @@
 #ENV GO111MODULE on
 #RUN git config --global url."https://libong:${{secrets.GO_MOD}}@github.com".insteadOf "https://github.com"
 #RUN apk add --no-cache libc6-compat
-# 将当前目录的代码推送到docker容器里的目录下
-#COPY go.mod /app/
-#COPY go.sum /app/
 # 把当前目录的文件拷过去，编译代码
 #COPY ./main /app/
 #WORKDIR /app
@@ -53,14 +50,18 @@
 # 定义容器运行时的命令
 #CMD ["/app/main"]
 
+#第二级构建（不需要进行编译）可以使用原始的alpine镜像 大小会小一点
 FROM alpine AS runner
 #作者
 MAINTAINER libong
+#修改Alpine Linux的APK源，将其从默认的dl-cdn.alpinelinux.org更换为阿里云的镜像源mirrors.aliyun.com 加速后续下载其他软件包的速度
 RUN set -ex \
-    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
-WORKDIR /app
+    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
+#将编译好的执行文件拷贝到docker容器指定位置
 COPY ./main /app/
+#设置工作目录
 WORKDIR /app
-RUN ls -l
+# 暴露服务端口
 EXPOSE 8080
-ENTRYPOINT ["./main"]
+# 定义容器运行时的命令
+#ENTRYPOINT ["./main"]
