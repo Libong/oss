@@ -28,7 +28,14 @@ jobs:
       uses: actions/setup-go@v4
       with:
         go-version: '1.20'
-
+      #缓存Go的依赖
+    - name: Cache Go Modules
+      uses: actions/cache@v2
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
       #设置环境变量 适用于私有库的依赖访问
     - name: make env
       shell: bash
@@ -45,11 +52,11 @@ jobs:
     - name: build
       run : CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./app/interface/oss/cmd/main.go
       #将任何文件进行上传 可以在action后获取
-    - name: Upload
-      uses: actions/upload-artifact@v1
-      with:
-        name: oss
-        path: /home/runner/work/oss/oss/main
+#    - name: Upload
+#      uses: actions/upload-artifact@v1
+#      with:
+#        name: oss
+#        path: /home/runner/work/oss/oss/main
       #登录阿里云镜像
     - name: Login to ali cloud
       uses: aliyun/acr-login@v1

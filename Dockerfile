@@ -64,4 +64,4 @@ WORKDIR /app
 # 暴露服务端口
 #EXPOSE 8080
 # 定义容器运行时的命令
-#ENTRYPOINT ["./main"]
+ENTRYPOINT ["./main -configPath=/app/conf -env=prod"]
