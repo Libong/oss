@@ -2,7 +2,7 @@ module libong/oss
 
 go 1.20
 
-replace libong/common => /Users/libeng/Documents/go/Project/libongCommon
+replace libong/common => github.com/Libong/common v0.0.0-20240519135933-bf3ade9eb5ef
 
 require (
 	github.com/aliyun/aliyun-oss-go-sdk v3.0.2+incompatible
