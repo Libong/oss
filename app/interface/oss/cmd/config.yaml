@@ -4,7 +4,8 @@ Server:
     Port: 8111
 Service:
   OssClientConfig:
-    AccessKeyID: "18888888881"
-    AccessKeySecret: "18888888881"
-    Bucket: "no_change"
-    BucketServiceUrl : "http://172.20.10.196:9100/manager/api/libong/ossupload"
+    Local:
+      AccessKey: "18888888888"
+      AccessSecret: "18888888888"
+      BucketName: "temp"
+      BucketServiceUrl : "http://192.168.10.101:9100/libong/manager/api/oss/upload"

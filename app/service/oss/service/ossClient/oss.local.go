@@ -11,6 +11,7 @@ import (
 	"libong/common/context"
 	customHttp "libong/common/server/http"
 	"libong/oss/app/service/oss/api"
+	"libong/oss/errors"
 	"mime/multipart"
 	"net/http"
 	"path"
@@ -62,6 +63,9 @@ func (o *LocalOss) Upload(ctx context.Context, req *api.UploadReq) (*api.UploadR
 	res, err := client.Do(request)
 	if err != nil {
 		return nil, err
+	}
+	if res.StatusCode != 200 {
+		return nil, errors.UploadError
 	}
 	body, err := io.ReadAll(res.Body)
 	if err != nil {

@@ -27,8 +27,8 @@ type Service struct {
 	OssClientConfig *ossClient.Config
 }
 type Dao struct {
-	ORM   *mysql.Config
-	Redis *redis.Config
+	Mysql *commonMysql.Config
+	Redis *commonRedis.Config
 }
 type Server struct {
 	HTTP *http.Config
