@@ -1,3 +1,7 @@
+github.com/Libong/common v0.0.0-20250821074829-4e8b71adb6a3 h1:s0XhrlW33Bvdkd3IFks82G+t1/9fjKosEXNFThsXEmE=
+github.com/Libong/common v0.0.0-20250821074829-4e8b71adb6a3/go.mod h1:7JG43IdKtIt+uLcpJRrQ/VBk7xuuAxZEDA2+m/zXd2o=
+github.com/Libong/login v0.0.0-20250821080436-fc2ef6b21b45 h1:NJ7njad2mFy8PqTrY04bcDxdKyb8WjFU9mqflSGXszU=
+github.com/Libong/login v0.0.0-20250821080436-fc2ef6b21b45/go.mod h1:Puj3hxhRg3h1ObXUln69H5ojLI4CUNRpekqchlcLsdo=
 github.com/aliyun/aliyun-oss-go-sdk v3.0.2+incompatible h1:8psS8a+wKfiLt1iVDX79F7Y6wUM49Lcha2FMXt4UM8g=
 github.com/aliyun/aliyun-oss-go-sdk v3.0.2+incompatible/go.mod h1:T/Aws4fEfogEE9v+HPhhw+CntffsBHJ8nXQCwKr0/g8=
 github.com/bsm/ginkgo/v2 v2.12.0 h1:Ny8MWAHyOepLGlLKYmXG4IEkioBysk6GpaRTLC8zwWs=

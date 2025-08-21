@@ -3,9 +3,8 @@ module libong/oss
 go 1.20
 
 replace (
-	//libong/common => github.com/Libong/common v0.0.0-20250105074641-7031e94ae44c //main
-	libong/common => /Users/libeng/Documents/go/Project/libongCommon
-	libong/login => /Users/libeng/Documents/go/Project/login
+	libong/common => github.com/Libong/common v0.0.0-20250821074829-4e8b71adb6a3 //main
+	libong/login => github.com/Libong/login v0.0.0-20250821080436-fc2ef6b21b45 //main
 )
 
 require (
