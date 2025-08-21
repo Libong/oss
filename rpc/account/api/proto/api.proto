@@ -1,0 +1,189 @@
+syntax = "proto3";
+
+package com.liBong.rbac.service.account.api;
+
+option go_package = "./;api";
+
+import "google/protobuf/empty.proto";
+
+service AccountService {
+  rpc addAccount (AddAccountReq) returns (AddAccountResp);
+  rpc deleteAccount (DeleteAccountReq) returns (google.protobuf.Empty);
+  rpc updateAccount (UpdateAccountReq) returns (google.protobuf.Empty);
+  rpc searchAccountsPage (SearchAccountsPageReq) returns (SearchAccountsPageResp);
+  rpc countAccount (CountAccountsReq) returns (CountAccountsResp);
+  rpc accountById (AccountByIdReq) returns (AccountByIdResp);
+  rpc accountsByIds (AccountsByIdsReq) returns (AccountsByIdsResp);
+
+  rpc accountByName (AccountByNameReq) returns (AccountByNameResp);
+  rpc accountByPhone (AccountByPhoneReq) returns (AccountByPhoneResp);
+  rpc batchAddAccount (BatchAddAccountReq) returns (google.protobuf.Empty);
+
+  rpc addAuthToken (AddAuthTokenReq) returns (google.protobuf.Empty);
+  rpc deleteAuthToken (DeleteAuthTokenReq) returns (google.protobuf.Empty);
+  rpc searchAuthTokens (SearchAuthTokensReq) returns (SearchAuthTokensResp);
+  rpc curAuthTokenByAId (CurAuthTokenByAIdReq) returns (CurAuthTokenByAIdResp);
+  rpc newestAuthTokenByToken (NewestAuthTokenByTokenReq) returns (NewestAuthTokenByTokenResp);
+}
+
+message AddAccountReq{
+  string account = 1; // 用户名
+  string name = 2; // 姓名
+  string cid = 3; //区号
+  string phone = 4; // 电话
+  string salt = 5; //盐
+  string password = 6; // 密码
+  uint32 sex = 7; // 性别
+  string id_card_no = 8; //证件号码
+  string email = 9; // 邮箱
+  string avatar = 10; // 头像
+}
+message AddAccountResp{
+  string id = 1; // id
+}
+message DeleteAccountReq{
+  repeated string ids = 1;
+}
+message UpdateAccountReq{
+  string account = 1; // 用户名
+  string name = 2; // 姓名
+  string cid = 3; //区号
+  string phone = 4; // 电话
+  string salt = 5; //盐
+  string password = 6; // 密码
+  uint32 sex = 7; // 性别
+  string id_card_no = 8; //证件号码
+  string email = 9; // 邮箱
+  string avatar = 10; // 头像
+
+  string account_id = 99;
+  repeated string zero_fields = 100;
+  bool handle_zero = 101;
+}
+message Account {
+  string account = 1; // 用户名
+  string name = 2; // 姓名
+  string cid = 3; //区号
+  string phone = 4; // 电话
+  string salt = 5; //盐
+  string password = 6; // 密码
+  uint32 sex = 7; // 性别
+  string id_card_no = 8; //证件号码
+  string email = 9; // 邮箱
+  string avatar = 10; // 头像
+
+  string account_id = 90;
+  int64 establish_at = 91;
+  int64 modify_at = 92;
+}
+message SearchAccountCondition{
+  repeated string account_ids = 1;
+  string fuzzy_name = 2; //模糊姓名
+  string fuzzy_phone = 3; //模糊手机号
+  uint32 sex = 4;
+  string name = 5; //姓名
+  string phone = 6; //手机号
+  string account = 7; // 用户名
+  string email = 8; // 邮箱
+  string account_or_phone = 9; //手机号或用户名
+}
+message SearchAccountsPageReq{
+  SearchAccountCondition condition = 1;
+
+  string content_field = 96; //content里字段名称 json格式
+  repeated string content_field_values = 97; //字段的值
+  bool sort_asc = 98;
+  string sort_field = 99;
+  uint32 page_size = 100;
+  uint32 page_num = 101;
+}
+message SearchAccountsPageResp{
+  repeated Account list = 1;
+}
+message CountAccountsReq{
+  SearchAccountCondition condition = 1;
+  string content_field = 96; //content里字段名称 json格式
+  repeated string content_field_values = 97; //字段的值
+}
+message CountAccountsResp{
+  int64 total = 1;
+}
+message AccountByIdReq{
+  string id = 1;
+}
+message AccountByIdResp{
+  Account account = 1;
+}
+message AccountsByIdsReq{
+  repeated string ids = 1;
+}
+message AccountsByIdsResp{
+  map<string,Account> map = 1;
+}
+
+message AccountByNameReq{
+  string name = 1;
+}
+message AccountByNameResp{
+  Account account = 1;
+}
+message AccountByPhoneReq{
+  string phone = 1;
+}
+message AccountByPhoneResp{
+  Account account = 1;
+}
+message BatchAddAccountReq{
+  repeated AddAccountReq accounts = 1;
+}
+enum AccountSex{
+    AccountSexUnknown = 0;
+    AccountSexMale = 1; //男
+    AccountSexFemale = 2; //女
+}
+
+/*********** token ***********/
+message AuthToken{
+  string account_id = 1; // 用户编号
+  string access_token = 2; // 授权码
+  string refresh_token = 3; // 刷新码
+  int64 access_expired_at = 4; // 授权过期时间
+  int64 refresh_expired_at = 5; // 刷新过期时间
+  string ip = 6; //
+  int64 establish_at = 7;//创建时间
+}
+message AddAuthTokenReq{
+  string account_id = 1; // 用户编号
+  string access_token = 2; // 授权码
+  string refresh_token = 3; // 刷新码
+  int64 access_expired_at = 4; // 授权过期时间
+  int64 refresh_expired_at = 5; // 刷新过期时间
+  string ip = 6; //
+}
+message DeleteAuthTokenReq{
+  string account_id = 1; // 用户编号
+  string access_token = 2; // 授权码
+}
+message SearchAuthTokensReq{
+  string account_id = 1; // 用户编号
+  string access_token = 2; // 授权码
+
+  uint32 page_size = 100;
+  uint32 page_num = 101;
+}
+message SearchAuthTokensResp{
+  repeated AuthToken list = 1;
+  int64 total = 2;
+}
+message CurAuthTokenByAIdReq{
+  string account_id = 1; // 用户编号
+}
+message CurAuthTokenByAIdResp{
+  AuthToken token = 1;
+}
+message NewestAuthTokenByTokenReq{
+  string access_token = 1; // 授权码
+}
+message NewestAuthTokenByTokenResp{
+  AuthToken token = 1;
+}

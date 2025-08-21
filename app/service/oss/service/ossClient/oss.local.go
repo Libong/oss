@@ -2,83 +2,108 @@ package ossClient
 
 import (
 	"bytes"
-	"crypto/md5"
-	"encoding/hex"
-	"encoding/json"
 	"github.com/google/uuid"
+	googleGrpc "google.golang.org/grpc"
 	"image"
-	"io"
 	"libong/common/context"
-	customHttp "libong/common/server/http"
+	"libong/common/server/grpc"
 	"libong/oss/app/service/oss/api"
-	"libong/oss/errors"
-	"mime/multipart"
-	"net/http"
+	bucketServiceApi "libong/oss/rpc/bucket/api"
 	"path"
 	"time"
 )
 
 type LocalOssConf struct {
-	AccessKey        string
-	AccessSecret     string
-	BucketName       string
-	BucketServiceUrl string
+	//AccessKey        string //用户名
+	//AccessSecret     string //密码
+	//BucketName       string
+	//BucketServiceUrl string
+	BucketService *grpc.Config
 }
 
 type LocalOss struct {
-	Config *LocalOssConf
+	Config        *LocalOssConf
+	bucketService bucketServiceApi.BucketServiceClient
 }
 
 func newLocalOss(config *LocalOssConf) *LocalOss {
-	return &LocalOss{
+	var (
+		bucketConn *googleGrpc.ClientConn
+		err        error
+	)
+	o := &LocalOss{
 		Config: config,
 	}
+	if bucketConn, err = grpc.NewConnection(config.BucketService); err != nil {
+		panic(-1)
+	}
+	o.bucketService = bucketServiceApi.NewBucketServiceClient(bucketConn)
+	return o
 }
 func (o *LocalOss) Upload(ctx context.Context, req *api.UploadReq) (*api.UploadResp, error) {
 	id := uuid.New().String()
-	//签名
-	param := "appId" + o.Config.AccessKey + "appSecret" + o.Config.AccessSecret
-	sum := md5.Sum([]byte(param))
-	//设置请求文件
-	buf := new(bytes.Buffer)
-	w := multipart.NewWriter(buf)
-	if cff, err := w.CreateFormFile("file", req.Name); err == nil {
-		cff.Write(req.Data)
+	appID := ctx.AppID()
+	if appID == "" {
+		appID = "temp"
 	}
-	w.Close()
-	request, err := http.NewRequest("POST", o.Config.BucketServiceUrl, buf)
-	if err != nil {
-		return nil, err
-	}
-	//设置请求头
-	request.Header.Set("Content-Type", w.FormDataContentType())
-	request.Header.Set("sign", hex.EncodeToString(sum[:]))
+	////签名
+	//param := "accessKey" + o.Config.AccessKey + "accessSecret" + o.Config.AccessSecret
+	//md5Param := commonTool.GetMd5String(param)
+	////设置请求文件
+	//buf := new(bytes.Buffer)
+	//w := multipart.NewWriter(buf)
+	//if cff, err := w.CreateFormFile("file", req.Name); err == nil {
+	//	cff.Write(req.Data)
+	//}
+	//w.Close()
+	//request, err := http.NewRequest("POST", o.Config.BucketServiceUrl, buf)
+	//if err != nil {
+	//	return nil, err
+	//}
+	////设置请求头
+	//request.Header.Set("Content-Type", w.FormDataContentType())
+	//request.Header.Set("sign", md5Param)
 	year := time.Now().Format("2006")
 	month := time.Now().Format("01")
 	day := time.Now().Format("02")
-	imgPath := o.Config.BucketName + "/" + year + "/" + month + "/" + day
-	request.Header.Set("prefix", imgPath)
-	//请求
-	client := &http.Client{}
-	res, err := client.Do(request)
+	imgPath := appID + "/" + year + "/" + month + "/" + day + "/" + req.Name
+	//request.Header.Set("prefix", imgPath)
+	////请求
+	//client := &http.Client{
+	//	Timeout: 5 * time.Second,
+	//}
+	//res, err := client.Do(request)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//if res.StatusCode != 200 {
+	//	return nil, errors.UploadError
+	//}
+	//body, err := io.ReadAll(res.Body)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//var resp customHttp.BaseResponse
+	//err = json.Unmarshal(body, &resp)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//if resp.Error != "" {
+	//	log.Error(ctx, "Upload fail err:%s", resp.Error)
+	//	return nil, errors.UploadError
+	//}
+	//var url string
+	//if resp.Data != nil {
+	//	url, _ = resp.Data.(string)
+	//}
+	addBucketObjectResp, err := o.bucketService.AddBucketObject(ctx, &bucketServiceApi.AddBucketObjectReq{
+		Path:    imgPath,
+		Data:    req.Data,
+		NeedZip: false,
+		IsDir:   false,
+	})
 	if err != nil {
 		return nil, err
-	}
-	if res.StatusCode != 200 {
-		return nil, errors.UploadError
-	}
-	body, err := io.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
-	}
-	var resp customHttp.BaseResponse
-	err = json.Unmarshal(body, &resp)
-	if err != nil {
-		return nil, err
-	}
-	var url string
-	if resp.Data != nil {
-		url, _ = resp.Data.(string)
 	}
 	//获取文件的后缀(文件类型)
 	fileNameWithSuffix := path.Base(req.Name)
@@ -94,7 +119,7 @@ func (o *LocalOss) Upload(ctx context.Context, req *api.UploadReq) (*api.UploadR
 		}
 	}
 	return &api.UploadResp{
-		Url:      url,
+		Url:      addBucketObjectResp.Url,
 		Id:       id,
 		Name:     req.Name,
 		Width:    width,

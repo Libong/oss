@@ -3,9 +3,14 @@ Server:
     Host: "0.0.0.0"
     Port: 8111
 Service:
+  Dao:
+    Redis:
+      Address: "127.0.0.1"
+      Port: 6379
+      Password: "tQF08UDhtu6g5VjghhYmag=="
+      Database: 0
   OssClientConfig:
     Local:
-      AccessKey: "18888888888"
-      AccessSecret: "18888888888"
-      BucketName: "temp"
-      BucketServiceUrl : "http://192.168.10.101:9100/libong/manager/api/oss/upload"
+      BucketService:
+        Host: "0.0.0.0"
+        Port: 9001

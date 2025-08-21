@@ -7,6 +7,7 @@ import (
 	"io"
 	"libong/common/context"
 	"libong/common/server/http"
+	ossServiceApi "libong/oss/app/service/oss/api"
 	"libong/oss/errors"
 	"strconv"
 )
@@ -26,7 +27,21 @@ func upload(ctx *http.Context) error {
 	if err != nil {
 		return errors.ParamsIsInvalid
 	}
-	res, err := svc.Upload(context.FromHTTPContext(ctx), fileBody, fileHeader.Filename, uint32(fileType))
+
+	var isKeepOriginalName bool
+	strIsKeepOriginalName := ctx.Gin().Query("isKeepOriginalName")
+	if strIsKeepOriginalName != "" {
+		isKeepOriginalName, err = strconv.ParseBool(strIsKeepOriginalName)
+		if err != nil {
+			return errors.ParamsIsInvalid
+		}
+	}
+	res, err := svc.Upload(context.FromHTTPContext(ctx), &ossServiceApi.UploadReq{
+		Name:               fileHeader.Filename,
+		IsKeepOriginalName: isKeepOriginalName,
+		Type:               uint32(fileType),
+		Data:               fileBody,
+	})
 	if err != nil {
 		return err
 	}

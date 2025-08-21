@@ -25,6 +25,7 @@ func New() *Config {
 
 type Service struct {
 	OssClientConfig *ossClient.Config
+	Dao             *Dao
 }
 type Dao struct {
 	Mysql *commonMysql.Config
