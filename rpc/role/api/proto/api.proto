@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package com.liBong.rbac.service.role.api;
+
+option go_package = "./;api";
+
+import "google/protobuf/empty.proto";
+
+service RoleService {
+  rpc addRole (AddRoleReq) returns (google.protobuf.Empty);
+  rpc deleteRole (DeleteRoleReq) returns (google.protobuf.Empty);
+  rpc updateRole (UpdateRoleReq) returns (google.protobuf.Empty);
+  rpc searchRolesPage (SearchRolesPageReq) returns (SearchRolesPageResp);
+  rpc countRole (CountRolesReq) returns (CountRolesResp);
+  rpc roleById (RoleByIdReq) returns (RoleByIdResp);
+  rpc rolesByIds (RolesByIdsReq) returns (RolesByIdsResp);
+
+  rpc roleByName (RoleByNameReq) returns (RoleByNameResp);
+  rpc batchAddRole (BatchAddRoleReq) returns (google.protobuf.Empty);
+
+}
+
+message AddRoleReq{
+  string role_id = 1; //角色标识
+  string name = 2; //角色名称
+  string describe = 3; //描述
+  string assignable_roles = 4; //可分配角色
+}
+message DeleteRoleReq{
+  repeated string ids = 1;
+}
+message UpdateRoleReq{
+  string role_id = 1; //角色标识
+  string name = 2; //角色名称
+  string describe = 3; //描述
+  string assignable_roles = 4; //可分配角色
+
+  repeated string zero_fields = 100;
+  bool handle_zero = 101;
+}
+message Role {
+  string role_id = 1; //角色标识
+  string name = 2; //角色名称
+  string describe = 3; //描述
+  string assignable_roles = 4; //可分配角色
+
+  int64 establish_at = 91;
+  int64 modify_at = 92;
+}
+message SearchRoleCondition{
+  repeated string role_ids = 1;
+  string fuzzy_name = 2;
+}
+message SearchRolesPageReq{
+  SearchRoleCondition condition = 1;
+
+  string content_field = 96; //content里字段名称 json格式
+  repeated string content_field_values = 97; //字段的值
+  bool sort_asc = 98;
+  string sort_field = 99;
+  uint32 page_size = 100;
+  uint32 page_num = 101;
+}
+message SearchRolesPageResp{
+  repeated Role list = 1;
+}
+message CountRolesReq{
+  SearchRoleCondition condition = 1;
+  string content_field = 96; //content里字段名称 json格式
+  repeated string content_field_values = 97; //字段的值
+}
+message CountRolesResp{
+  int64 total = 1;
+}
+message RoleByIdReq{
+  string id = 1;
+}
+message RoleByIdResp{
+  Role role = 1;
+}
+message RolesByIdsReq{
+  repeated string ids = 1;
+}
+message RolesByIdsResp{
+  map<string,Role> map = 1;
+}
+
+message RoleByNameReq{
+  string name = 1;
+}
+message RoleByNameResp{
+  Role role = 1;
+}
+message BatchAddRoleReq{
+  repeated AddRoleReq roles = 1;
+}

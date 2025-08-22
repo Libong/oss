@@ -2,6 +2,7 @@ package service
 
 import (
 	"libong/common/context"
+	commonRedis "libong/common/redis"
 	"libong/oss/app/interface/oss/conf"
 	ossServiceConf "libong/oss/app/service/oss/conf"
 	ossServiceGrpc "libong/oss/app/service/oss/server/grpc"
@@ -13,6 +14,9 @@ type Service struct {
 }
 
 func New(c *conf.Service) (s *Service) {
+	if commonRedis.RedisClient == nil {
+		panic("RedisClient not init")
+	}
 	svc := Service{
 		ossService: ossServiceGrpc.New(ossServiceService.New(
 			&ossServiceConf.Service{

@@ -25,10 +25,11 @@ func New() *Config {
 
 type Service struct {
 	OssClientConfig *ossClient.Config
+	Dao             *Dao
 }
 type Dao struct {
-	ORM   *mysql.Config
-	Redis *redis.Config
+	Mysql *commonMysql.Config
+	Redis *commonRedis.Config
 }
 type Server struct {
 	HTTP *http.Config

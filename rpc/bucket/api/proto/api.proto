@@ -1,0 +1,185 @@
+syntax = "proto3";
+
+package com.libong.storage.service.bucket;
+
+option go_package = "./;api";
+
+import "google/protobuf/empty.proto";
+
+service BucketService{
+
+  //添加桶
+  rpc addBucket(AddBucketReq)returns(AddBucketResp){}
+  //修改桶
+  rpc updateBucket(UpdateBucketReq)returns(google.protobuf.Empty){}
+  //删除桶
+  rpc deleteBucket(DeleteBucketReq)returns(google.protobuf.Empty){}
+  //桶详情
+  rpc bucketByID(BucketByIDReq)returns(BucketByIDResp){}
+  //分页查询
+  rpc searchBucketsPage(SearchBucketsPageReq)returns(SearchBucketsPageResp){}
+  //查询桶总数
+  rpc countBucket(CountBucketReq)returns(CountBucketResp){}
+  //根据桶名称查询桶详情
+  rpc bucketByName(BucketByNameReq)returns(BucketByNameResp){}
+  //添加桶对象
+  rpc addBucketObject(AddBucketObjectReq)returns(AddBucketObjectResp){}
+  // 对象查询
+  rpc searchBucketObjects(SearchBucketObjectsReq)returns(SearchBucketObjectsResp){}
+  //删除对象
+  rpc deleteBucketObject(DeleteBucketObjectReq)returns(google.protobuf.Empty){}
+  //生成文件访问路径
+  rpc makeBucketObjectUrl(MakeBucketObjectUrlReq)returns(MakeBucketObjectUrlResp){}
+
+  /*--------------------桶权限--------------------*/
+  //批量添加
+  rpc batchAddBucketAccountRel(BatchAddBucketAccountRelReq)returns(google.protobuf.Empty){}
+  //批量删除
+  rpc batchDeleteBucketAccountRel(BatchDeleteBucketAccountRelReq)returns(google.protobuf.Empty){}
+  //查询
+  rpc searchBucketAccountRel(SearchBucketAccountRelReq)returns(SearchBucketAccountRelResp){}
+  //修改
+  rpc updateBucketAccountRel(UpdateBucketAccountRelReq)returns(google.protobuf.Empty){}
+}
+message AddBucketReq{
+  string name = 1; //名称
+  int64 usage = 2; //用量
+  uint32 object_cnt = 3; //对象数
+  uint32 access_policy = 4; //访问策略 1公有 2私有 3自定义
+  string access_rule = 5; //访问规则
+  string desc = 6; //描述
+}
+message AddBucketResp{
+  string id = 1;
+}
+message UpdateBucketReq{
+  int64 usage = 1; //用量
+  uint32 object_cnt = 2; //对象数
+  uint32 access_policy = 3; //访问策略 1公有 2私有 3自定义
+  string access_rule = 4; //访问规则
+  string bucket_id = 5; //桶编号
+  string desc = 6; //描述
+
+  bool handle_zero = 90; //是否处理零值 需要在dao层进行判断 为true时只能传可以被设置为零值的字段
+  repeated string zero_fields = 91; //要处理的字段json
+}
+message DeleteBucketReq{
+  string id = 1;
+}
+message BucketByIDReq{
+  string id = 1;
+}
+message BucketByIDResp{
+   Bucket bucket = 1;
+}
+message Bucket{
+  string name = 1; //名称
+  int64 usage = 2; //用量
+  uint32 object_cnt = 3; //对象数
+  uint32 access_policy = 4; //访问策略 1公有 2私有 3自定义
+  string access_rule = 5; //访问规则
+  string bucket_id = 6; //桶编号
+  int64 establish_at = 7; //创建时间
+  int64 modified_at = 8; //更新时间
+  string desc = 9; //描述
+}
+message BucketCondition{
+  string fuzzy_name = 1; //名称
+  repeated string bucket_ids = 2;
+}
+message SearchBucketsPageReq{
+  BucketCondition condition = 1;
+
+  uint32 page_num = 100;
+  uint32 page_size = 101;
+}
+message SearchBucketsPageResp{
+  repeated Bucket list = 1;
+}
+message CountBucketReq{
+  BucketCondition condition = 1;
+}
+message CountBucketResp{
+  int64 total = 1;
+}
+message BucketByNameReq{
+  string name = 1; //名称
+}
+message BucketByNameResp{
+  Bucket bucket = 1;
+}
+message AddBucketObjectReq{
+  string path = 1; //桶名称
+  bytes data = 3; //数据
+  bool need_zip = 4; //是否需要解压 (用于前端上传文件夹时压缩成zip,在后端进行解压)
+  bool is_dir = 5; //是否是文件夹
+}
+message AddBucketObjectResp{
+  string url = 1; //访问地址
+}
+message Object{
+  string name = 1; //对象名称
+  int64 last_modify_at = 2; //对象修改时间
+  int64 size = 3; //对象大小
+  bool is_dir = 4;//是否是文件夹
+}
+message SearchBucketObjectsReq{
+  string path = 1;
+}
+message SearchBucketObjectsResp{
+  repeated Object list = 1;
+}
+message DeleteBucketObjectReq{
+  string path = 1;
+}
+message MakeBucketObjectUrlReq{
+  string path = 1;
+  uint32 expire_at = 2;
+}
+message MakeBucketObjectUrlResp{
+  string url = 1;
+}
+message BatchAddBucketAccountRelReq{
+  repeated BucketAccountRel list = 1;
+}
+message BatchDeleteBucketAccountRelReq{
+  string bucket_id = 1;
+  repeated string account_ids = 2;
+}
+message BucketAccountRel{
+  string bucket_id = 1;
+  string account_id = 2;
+  uint32 access_mode = 3; //访问模式 1只读 2只写 3读写
+  string access_key = 4; //访问密钥
+  string access_secret = 5; //访问密码
+}
+message SearchBucketAccountRelReq{
+  repeated string bucket_ids = 1;
+  repeated string account_ids = 2;
+
+  uint32 page_num = 100;
+  uint32 page_size = 101;
+}
+message SearchBucketAccountRelResp{
+  repeated BucketAccountRel list = 1;
+  int64 total = 2;
+}
+message UpdateBucketAccountRelReq{
+  repeated string bucket_ids = 1;
+  repeated string account_ids = 2;
+  uint32 access_mode = 3; //访问模式 1只读 2只写 3读写
+  string access_key = 4; //访问密钥
+  string access_secret = 5; //访问密码
+}
+enum BucketAccessModel {
+    BucketAccessModelUnknown = 0;
+    BucketAccessModelRead = 1; //只读
+    BucketAccessModelWrite = 2; //只写
+    BucketAccessModelReadWrite = 3; //读写
+}
+enum BucketAccessPolicy {
+    BucketAccessPolicyUnknown = 0;
+    BucketAccessPolicyPrivate = 1; //私有
+    BucketAccessPolicyPublish = 2; //公有
+    BucketAccessPolicyCustom = 3; //自定义
+}

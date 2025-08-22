@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package com.liBong.rbac.service.relation.api;
+
+option go_package = "./;api";
+
+import "google/protobuf/empty.proto";
+
+service RelationService{
+  rpc batchAddAccountRole (BatchAddAccountRoleReq) returns (google.protobuf.Empty);
+  rpc deleteAccountRole (DeleteAccountRoleReq) returns (google.protobuf.Empty);
+  rpc searchAccountRoles (SearchAccountRolesReq) returns (SearchAccountRolesResp);
+
+  rpc batchAddAccountDepartment (BatchAddAccountDepartmentReq) returns (google.protobuf.Empty);
+  rpc deleteAccountDepartment (DeleteAccountDepartmentReq) returns (google.protobuf.Empty);
+  rpc searchAccountDepartments (SearchAccountDepartmentsReq) returns (SearchAccountDepartmentsResp);
+
+}
+message BatchAddAccountRoleReq{
+  repeated AccountRole list = 1;
+}
+message DeleteAccountRoleReq{
+  repeated string role_ids = 1;
+  repeated string account_ids = 2;
+}
+message AccountRole{
+  string role_id = 1;
+  string account_id = 2;
+}
+message SearchAccountRolesReq{
+  repeated string role_ids = 1;
+  repeated string account_ids = 2;
+  bool no_total = 3;
+
+  uint32 page_size = 100;
+  uint32 page_num = 101;
+}
+message SearchAccountRolesResp{
+  repeated AccountRole list = 1;
+  int64 total = 2;
+}
+message BatchAddAccountDepartmentReq{
+  repeated AccountDepartment list = 1;
+}
+message DeleteAccountDepartmentReq{
+  repeated string department_ids = 1;
+  repeated string account_ids = 2;
+}
+message AccountDepartment{
+  string department_id = 1;
+  string account_id = 2;
+}
+message SearchAccountDepartmentsReq{
+  repeated string department_ids = 1;
+  repeated string account_ids = 2;
+  bool no_total = 3;
+
+  uint32 page_size = 100;
+  uint32 page_num = 101;
+}
+message SearchAccountDepartmentsResp{
+  repeated AccountDepartment list = 1;
+  int64 total = 2;
+}

@@ -19,6 +19,8 @@ func NewOss(conf *Config) OssClient {
 		return newAliYunOss(conf.AliYun)
 	} else if conf.Local != nil {
 		return newLocalOss(conf.Local)
+	} else {
+		panic("NewOssClient err")
 	}
 	return nil
 }
