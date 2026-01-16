@@ -40,6 +40,9 @@ func newLocalOss(config *LocalOssConf) *LocalOss {
 	o.bucketService = bucketServiceApi.NewBucketServiceClient(bucketConn)
 	return o
 }
+func (o *LocalOss) MakeFileUrl(ctx context.Context, keys []string) (map[string]string, error) {
+	return nil, nil
+}
 func (o *LocalOss) Upload(ctx context.Context, req *api.UploadReq) (*api.UploadResp, error) {
 	id := uuid.New().String()
 	appID := ctx.AppID()

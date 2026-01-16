@@ -1,7 +1,7 @@
 Server:
   GRPC:
     Host: "0.0.0.0"
-    Port: 9000
+    Port: 9001
 Service:
   Dao:
     Redis:
@@ -9,8 +9,11 @@ Service:
       Port: 6379
       Password: "tQF08UDhtu6g5VjghhYmag=="
       Database: 0
-  Oss:
-    Local:
-      BucketService:
-        Host: "0.0.0.0"
-        Port: 9001
+  OssClientConfig:
+    AliYun:
+      BucketName: "store-libong"
+#    Local:
+#      BucketService:
+#        Host: "0.0.0.0"
+#        Port: 9001
+
