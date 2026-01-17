@@ -7,6 +7,7 @@ import (
 
 type OssClient interface {
 	Upload(ctx context.Context, req *api.UploadReq) (*api.UploadResp, error)
+	MakeFileUrl(ctx context.Context, keys []string) (map[string]string, error)
 }
 
 type Config struct {

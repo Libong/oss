@@ -6,6 +6,13 @@ option go_package = "./;api";
 
 service OssService{
   rpc upload(UploadReq)returns(UploadResp){}
+  rpc makeFileUrl(MakeFileUrlReq)returns(MakeFileUrlResp){}
+}
+message MakeFileUrlReq{
+  repeated string keys = 1;
+}
+message MakeFileUrlResp{
+  map<string,string> map = 1;
 }
 
 message UploadReq {
@@ -16,7 +23,7 @@ message UploadReq {
 }
 
 message UploadResp {
-  string id = 1;
+  string id = 1; //文件id
   string name = 2; //文件名称
   string url = 3; //文件地址
   string file_type = 4; //文件类型

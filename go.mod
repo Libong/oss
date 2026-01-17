@@ -3,12 +3,12 @@ module libong/oss
 go 1.20
 
 replace (
-	libong/common => github.com/Libong/common v0.0.0-20250821074829-4e8b71adb6a3 //main
-	libong/login => github.com/Libong/login v0.0.0-20250821080436-fc2ef6b21b45 //main
+	libong/common => github.com/Libong/common v0.0.0-20260116171319-10fbe63bfcfb //main
+	libong/login => github.com/Libong/login v0.0.0-20260116170113-e28f25dc9e7a //main
 )
 
 require (
-	github.com/aliyun/aliyun-oss-go-sdk v3.0.2+incompatible
+	github.com/aliyun/alibabacloud-oss-go-sdk-v2 v1.3.0
 	github.com/google/uuid v1.4.0
 	github.com/spf13/viper v1.18.2
 	google.golang.org/grpc v1.59.0
@@ -61,11 +61,11 @@ require (
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.9.0 // indirect
 	golang.org/x/arch v0.7.0 // indirect
-	golang.org/x/crypto v0.22.0 // indirect
+	golang.org/x/crypto v0.36.0 // indirect
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
-	golang.org/x/net v0.24.0 // indirect
-	golang.org/x/sys v0.19.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/net v0.38.0 // indirect
+	golang.org/x/sys v0.31.0 // indirect
+	golang.org/x/text v0.23.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20231120223509-83a465c0220f // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
