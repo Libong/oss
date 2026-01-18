@@ -10,7 +10,6 @@ import (
 	_ "image/jpeg"
 	_ "image/png"
 	"libong/common/context"
-	"libong/common/env"
 	"libong/common/log"
 	commonRedis "libong/common/redis"
 	"libong/common/snowflake"
@@ -36,12 +35,12 @@ type AliYunOss struct {
 
 func newAliYunOss(config *AliYunConf) *AliYunOss {
 	var provider credentials.CredentialsProvider
-	if env.Env == env.DeployEnvDev {
-		provider = credentials.NewStaticCredentialsProvider("",
-			"", "")
-	} else {
-		provider = credentials.NewEcsRoleCredentialsProvider()
-	}
+	//if env.Env == env.DeployEnvDev {
+	//	provider = credentials.NewStaticCredentialsProvider("",
+	//		"", "")
+	//} else {
+	provider = credentials.NewEcsRoleCredentialsProvider()
+	//}
 	cfg := oss.LoadDefaultConfig().
 		WithCredentialsProvider(provider).
 		WithRegion("cn-hangzhou")
