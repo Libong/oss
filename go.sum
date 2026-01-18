@@ -1,5 +1,5 @@
-github.com/Libong/common v0.0.0-20260118124618-4a6693081627 h1:aZ5TiYRzUq/PGwVbENPGtTzgpUVRC6KEg+fhzHl/4i0=
-github.com/Libong/common v0.0.0-20260118124618-4a6693081627/go.mod h1:duD+iHa2x1b3Swe7kIPIPEwGHCx0JDhV+8xWfqCtYeA=
+github.com/Libong/common v0.0.0-20260118125349-705fdaa69cce h1:FHTUPApqSxZ9nAv4ahlXzukk+cTqY/0V3Mw7OSPYDFk=
+github.com/Libong/common v0.0.0-20260118125349-705fdaa69cce/go.mod h1:duD+iHa2x1b3Swe7kIPIPEwGHCx0JDhV+8xWfqCtYeA=
 github.com/Libong/login v0.0.0-20260116170113-e28f25dc9e7a h1:Ag9IrzK5fGIYOafeCVo8+MRSkkFEL2CwIKu5KzjjMAk=
 github.com/Libong/login v0.0.0-20260116170113-e28f25dc9e7a/go.mod h1:roO04qkfQDSETB7JZCjDaIGrmsoSmZPMf2U07Z6j06Q=
 github.com/aliyun/alibabacloud-oss-go-sdk-v2 v1.3.0 h1:wQlqotpyjYPjJz+Noh5bRu7Snmydk8SKC5Z6u1CR20Y=
