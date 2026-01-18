@@ -3,7 +3,7 @@ module libong/oss
 go 1.20
 
 replace (
-	libong/common => github.com/Libong/common v0.0.0-20260116171319-10fbe63bfcfb //main
+	libong/common => github.com/Libong/common v0.0.0-20260118124618-4a6693081627 //main
 	libong/login => github.com/Libong/login v0.0.0-20260116170113-e28f25dc9e7a //main
 )
 

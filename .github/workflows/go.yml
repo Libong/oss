@@ -4,12 +4,12 @@
 name: GOGOGO
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
 env:
-  WORK_PATH: "/app/service/oss/cmd/main.go"
+  WORK_PATH: "/app/interface/oss/cmd/main.go"
 
 jobs:
   #定义工作流名称
