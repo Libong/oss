@@ -29,8 +29,9 @@ type AliYunConf struct {
 
 // AliYunOss .
 type AliYunOss struct {
-	client *oss.Client
-	config *AliYunConf
+	clientIn  *oss.Client
+	clientOut *oss.Client
+	config    *AliYunConf
 }
 
 func newAliYunOss(config *AliYunConf) *AliYunOss {
@@ -41,13 +42,18 @@ func newAliYunOss(config *AliYunConf) *AliYunOss {
 	//} else {
 	provider = credentials.NewEcsRoleCredentialsProvider()
 	//}
-	cfg := oss.LoadDefaultConfig().
+	cfgIn := oss.LoadDefaultConfig().
 		WithCredentialsProvider(provider).
 		WithRegion("cn-hangzhou").
 		WithEndpoint("oss-cn-hangzhou-internal.aliyuncs.com")
+	cfgOut := oss.LoadDefaultConfig().
+		WithCredentialsProvider(provider).
+		WithRegion("cn-hangzhou").
+		WithEndpoint("oss-cn-hangzhou.aliyuncs.com")
 	return &AliYunOss{
-		client: oss.NewClient(cfg),
-		config: config,
+		clientIn:  oss.NewClient(cfgIn),
+		clientOut: oss.NewClient(cfgOut),
+		config:    config,
 	}
 }
 
@@ -71,7 +77,7 @@ func (o *AliYunOss) MakeFileUrl(ctx context.Context, keys []string) (map[string]
 				continue
 			}
 		}
-		result, err := o.client.Presign(ctx, &oss.GetObjectRequest{
+		result, err := o.clientOut.Presign(ctx, &oss.GetObjectRequest{
 			Bucket: &o.config.BucketName,
 			Key:    &key,
 		}, oss.PresignExpires(defaultFileUrlExpiredDuration))
@@ -107,12 +113,12 @@ func (o *AliYunOss) Upload(ctx context.Context, req *api.UploadReq) (*api.Upload
 		Body:   reader,
 	}
 
-	_, err := o.client.PutObject(ctx, request)
+	_, err := o.clientIn.PutObject(ctx, request)
 	if err != nil {
 		log.Error(ctx, "Upload PutObject err:%v", err)
 		return nil, err
 	}
-	result, err := o.client.Presign(ctx, &oss.GetObjectRequest{
+	result, err := o.clientOut.Presign(ctx, &oss.GetObjectRequest{
 		Bucket: &o.config.BucketName,
 		Key:    &objectName,
 	}, oss.PresignExpires(defaultFileUrlExpiredDuration))
