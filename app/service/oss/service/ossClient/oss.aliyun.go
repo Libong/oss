@@ -43,7 +43,8 @@ func newAliYunOss(config *AliYunConf) *AliYunOss {
 	//}
 	cfg := oss.LoadDefaultConfig().
 		WithCredentialsProvider(provider).
-		WithRegion("cn-hangzhou")
+		WithRegion("cn-hangzhou").
+		WithEndpoint("oss-cn-hangzhou-internal.aliyuncs.com")
 	return &AliYunOss{
 		client: oss.NewClient(cfg),
 		config: config,
